@@ -34,7 +34,7 @@ inline void construct(T1* ptr) {
      * @tparam T1 
      * @tparam T2 
      * @param ptr 构造地址
-     * @param value 构造T1所需要的参数
+     * @param value 赋值构造
      */
 template <typename T1, typename T2>
 inline void construct(T1* ptr, const T2& value) {
