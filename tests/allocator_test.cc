@@ -23,7 +23,7 @@ int main() {
     *(addr2+1) = 2;
     *(addr2+2) = 3;
     *(addr2+3) = 4;
-    *(addr2+4) = 5;
-    *(addr2+5) = 6;
-    delete[] addr2;
+    *(addr2+4) = 6666;
+    allocator<int>::deallocate(addr2);
+    return 0;
 }

@@ -18,7 +18,17 @@ public:
     }
     // new n个
     static T* allocate(int n) {
-        return static_cast<T*>(::operator new(n * sizeof(T)));
+        if (n == 0) return nullptr;
+        return static_cast<T*>(::operator new [](n * sizeof(T)));
+    }
+
+    static void deallocate(T* ptr) {
+        if (ptr == nullptr) return;
+        ::operator delete (ptr);
+    }
+    static void deallocator(T* ptr, int n) {
+        if (ptr == nullptr) return;
+        ::operator delete [](ptr);
     }
 
 };
