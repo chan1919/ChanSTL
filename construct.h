@@ -55,7 +55,7 @@ inline void construct(T1* ptr, const T2& value) {
 // }
 
     /**
-     * 销毁函数
+     * 调用析构函数
      * @tparam T 
      * @param ptr 
      */
@@ -64,5 +64,31 @@ inline void destroy(T* ptr) {
     ptr->~T();
 }
 
-// @ TODO
-// 对多种迭代器的销毁
+/**
+ * 连续析构
+ * 
+ * 这里对连续的迭代器通过 
+ * __destory调用 __destory_aux 进行分流
+ * 平凡的对象不需要调用析构函数，这里do nothing
+ * 直接交给delete 释放内存即可
+ * 
+ * 非平凡的对象需要先析构再释放，这里逐个调用析构函数
+ */
+template <typename ForwardIterator>
+inline void destory(ForwardIterator first, ForwardIterator last) {
+    __destory(first, last, value_type(first));
+}
+
+template <typename ForwardIterator, typename T>
+inline void __destory(ForwardIterator first, ForwardIterator last, T*) {
+    typedef typename __type_traits<T>::has_trivial_destructor trivial_destructor;
+    __destory_aux(first, last, trivial_destructor());
+}
+
+template <typename ForwardIterator>
+inline void __destory_aux(ForwardIterator first, ForwardIterator last, false_type) {
+    for (; first < last; ++first) destory(&(*first));
+}
+
+template <typename ForwardIterator>
+inline void __destory_aux(ForwardIterator first, ForwardIterator last, true_type) {}
