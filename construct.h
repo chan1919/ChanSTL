@@ -75,20 +75,24 @@ inline void destroy(T* ptr) {
  * 非平凡的对象需要先析构再释放，这里逐个调用析构函数
  */
 template <typename ForwardIterator>
-inline void destory(ForwardIterator first, ForwardIterator last) {
+inline void 
+destory(ForwardIterator first, ForwardIterator last) {
     __destory(first, last, value_type(first));
 }
 
 template <typename ForwardIterator, typename T>
-inline void __destory(ForwardIterator first, ForwardIterator last, T*) {
+inline void 
+__destory(ForwardIterator first, ForwardIterator last, T*) {
     typedef typename __type_traits<T>::has_trivial_destructor trivial_destructor;
     __destory_aux(first, last, trivial_destructor());
 }
 
 template <typename ForwardIterator>
-inline void __destory_aux(ForwardIterator first, ForwardIterator last, false_type) {
+inline void 
+__destory_aux(ForwardIterator first, ForwardIterator last, false_type) {
     for (; first < last; ++first) destory(&(*first));
 }
 
 template <typename ForwardIterator>
-inline void __destory_aux(ForwardIterator first, ForwardIterator last, true_type) {}
+inline void
+ __destory_aux(ForwardIterator first, ForwardIterator last, true_type) {}
