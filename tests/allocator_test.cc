@@ -25,5 +25,6 @@ int main() {
     *(addr2+3) = 4;
     *(addr2+4) = 6666;
     allocator<int>::deallocate(addr2);
+    // delete (addr2+4);  //delete两次
     return 0;
 }
