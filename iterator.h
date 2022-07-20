@@ -10,7 +10,7 @@
 #pragma once
 #include <cstddef>
 /**
- * 五种迭代器的标志：
+ * 五种迭代器的类型：
  * ---------
  * 输入迭代器
  * 输出迭代器
@@ -25,7 +25,12 @@ struct bidirectional_iterator_tag: public forward_iterator_tag {};
 struct random_access_iterator_tag: public bidirectional_iterator_tag {};
 
 /**
- * 将迭代器标志、类型、引用类型、指针距、指针类型
+ * 将
+ * [迭代器类型]、
+ * [值类型]、
+ * [指针距]、
+ * [指针类型]、
+ * [引用类型]
  * 和各种迭代器自身建立联系
  */
 template <typename T, typename Distance>
@@ -126,3 +131,28 @@ struct iterator_traits<const T*> {
     typedef const T*                    pointer;
     typedef const T&                    reference;  
 };
+
+    /**
+     * 对萃取器功能的实现：
+     * 提取[迭代器类型]
+     * 提取[值类型]
+     * 提取[指针距]
+     */
+template <typename Iterator>
+inline typename iterator_traits<Iterator>::iterator_category
+    iterator_category(const Iterator& it) {
+        typedef typename iterator_traits<Iterator>::iterator_category category;
+        return category();
+    }
+
+template <typename Iterator>
+inline typename iterator_traits<Iterator>::value_type*
+    value_type(const Iterator& it) {
+        return static_cast<typename iterator_traits<Iterator>::value_type*>(nullptr);
+    }
+
+template <typename Iterator>
+inline typename iterator_traits<Iterator>::difference_type*
+    difference_type(const Iterator& it) {
+        return static_cast<typename iterator_traits<Iterator>::diference_type*>(nullptr);
+    }
