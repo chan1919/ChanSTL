@@ -10,6 +10,7 @@
 #include "allocator.h"
 #include "construct.h"
 #include "iterator.h"
+
 /**
  * 链表节点
  * @tparam T 
@@ -85,4 +86,69 @@ public:
         --(*this);
         return temp;
     }  
+};
+
+/**
+ * 环形-双向list
+ */
+template <typename T>
+class list {
+protected:
+    typedef list_node<T>            list_node;
+    // 结点内存 分配器
+    typedef allocator<list_node>    list_node_allocator;
+
+public:
+    typedef T                   value_type;
+    typedef value_type*         pointer;
+    typedef const value_type*   const_pointer;
+    typedef value_type&         reference;
+    typedef const value_type&   const_reference;
+    typedef size_t              size_type;
+    typedef ptrdiff_t           difference_type;
+
+    typedef list_node*          node_ptr;
+    typedef list_iterator<T>    iterator;
+
+protected:
+    node_ptr    node; //标记结点
+
+public:
+    list() { empty_init();}
+    ~list();
+    list(const list<T>& other);
+
+public:
+    iterator begin() {
+        return node->next;
+    }
+
+    iterator end() { return node; }
+
+    bool empty() const {
+        return node->next == node;
+    }
+
+    size_type size() const;
+
+    reference front() { return *begin();}
+
+    reference back() {  return *(--end()); }
+
+    void push_front(const T& vlaue);
+    void push_back (const T& value);
+    void pop_front();
+    void pop_back();
+    void clear();
+
+    iterator insert(iterator pos, const T& value);
+    iterator erase(iterator pos);
+    void splice (iterator pos, list<T>& l);
+    void remove (const T& value);
+    void merge(list<T>& l);
+    void reverse();
+    void swap(list<T>& l);
+
+    void sort();
+    
 };
